@@ -1,0 +1,17 @@
+{
+  "eta": 0.025424627401503506,
+  "max_depth": 3,
+  "subsample": 0.8870145737504873,
+  "colsample_bytree": 0.7485779491700473,
+  "min_child_weight": 279,
+  "alpha": 9.101012688297413,
+  "lambda": 0.04521366459091149,
+  "gamma": 0.576471743525568,
+  "objective": "rank:ndcg",
+  "eval_metric": [
+    "ndcg@5",
+    "ndcg@10",
+    "ndcg@20"
+  ],
+  "seed": 42
+}

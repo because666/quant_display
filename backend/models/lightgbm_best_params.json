@@ -1,0 +1,23 @@
+{
+  "num_leaves": 83,
+  "learning_rate": 0.007404472559987595,
+  "feature_fraction": 0.4325257964926398,
+  "bagging_fraction": 0.8795542149013333,
+  "bagging_freq": 7,
+  "min_child_samples": 414,
+  "lambda_l1": 0.0033347927286375843,
+  "lambda_l2": 0.0003078651783619622,
+  "max_depth": 8,
+  "min_gain_to_split": 0.005762487216478602,
+  "objective": "lambdarank",
+  "metric": "ndcg",
+  "ndcg_eval_at": [
+    5,
+    10,
+    20
+  ],
+  "boosting_type": "gbdt",
+  "verbose": -1,
+  "seed": 42,
+  "feature_pre_filter": false
+}
