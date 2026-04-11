@@ -25,6 +25,22 @@ _section_cache: dict[str, Any] = {}
 _date_list_cache: list[str] | None = None
 
 
+def _find_parquet_files(data_dir: Path) -> list[Path]:
+    """查找 data_dir 及其一级子目录中的 parquet 截面数据文件"""
+    candidates = []
+    for fname in ("test.parquet", "val.parquet", "train.parquet"):
+        direct = data_dir / fname
+        if direct.exists():
+            candidates.append(direct)
+        else:
+            for sub_dir in (d for d in data_dir.iterdir() if d.is_dir()):
+                p = sub_dir / fname
+                if p.exists():
+                    candidates.append(p)
+                    break
+    return candidates
+
+
 def _get_available_dates(data_dir: Path) -> list[str]:
     """获取所有可用的截面日期列表（从parquet文件中提取）"""
     global _date_list_cache
@@ -32,15 +48,15 @@ def _get_available_dates(data_dir: Path) -> list[str]:
         return _date_list_cache
 
     all_dates: list[pd.Timestamp] = []
-    for fname in ("test.parquet", "val.parquet", "train.parquet"):
-        path = data_dir / fname
-        if not path.exists():
+    for path in _find_parquet_files(data_dir):
+        try:
+            df = pd.read_parquet(path, columns=["date"])
+            if "date" not in df.columns:
+                continue
+            dates = pd.to_datetime(df["date"]).unique()
+            all_dates.extend(dates)
+        except Exception:
             continue
-        df = pd.read_parquet(path, columns=["date"])
-        if "date" not in df.columns:
-            continue
-        dates = pd.to_datetime(df["date"]).unique()
-        all_dates.extend(dates)
 
     all_dates = sorted(set(all_dates), reverse=True)
     result = [str(d.date()) for d in all_dates]
@@ -56,11 +72,11 @@ def _load_section(data_dir: Path, date_str: str | None = None) -> tuple[pd.DataF
 
     factor_cols = load_factor_columns(data_dir=data_dir)
 
-    for fname in ("test.parquet", "val.parquet", "train.parquet"):
-        path = data_dir / fname
-        if not path.exists():
+    for path in _find_parquet_files(data_dir):
+        try:
+            df = pd.read_parquet(path)
+        except Exception:
             continue
-        df = pd.read_parquet(path)
         if "date" not in df.columns:
             continue
         df["date"] = pd.to_datetime(df["date"])

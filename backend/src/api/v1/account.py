@@ -69,7 +69,7 @@ def _error_response(error_code: str, message: str) -> dict[str, Any]:
     return {"code": 400, "message": message, "error_code": error_code, "data": None}
 
 
-@router.post("")
+@router.post("/")
 def api_create_account(body: CreateAccountRequest) -> dict[str, Any]:
     """
     创建影子账户
@@ -109,7 +109,7 @@ def api_create_account(body: CreateAccountRequest) -> dict[str, Any]:
     raise HTTPException(status_code=500, detail=result.message)
 
 
-@router.get("")
+@router.get("/")
 def api_list_accounts() -> dict[str, Any]:
     """
     列出所有影子账户（基本信息）
