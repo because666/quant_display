@@ -12,12 +12,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 升级pip
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# 复制依赖文件并安装
-COPY requirements.txt .
+# 复制backend目录的依赖文件
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 复制项目代码
-COPY . .
+# 复制backend目录的代码
+COPY backend/ .
 
 # 设置环境变量
 ENV PYTHONPATH=/app
