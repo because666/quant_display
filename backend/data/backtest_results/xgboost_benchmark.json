@@ -1,0 +1,13 @@
+{
+  "index_code": "000300.SH",
+  "name": "沪深300",
+  "granularity": "daily",
+  "dates": [],
+  "nav_values": [],
+  "source": "unavailable",
+  "range": {
+    "start": "2023-01-06",
+    "end": "2024-12-20"
+  },
+  "note": "nav 以区间内首个有效交易日收盘价归一为 1.0"
+}

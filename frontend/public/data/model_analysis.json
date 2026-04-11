@@ -1,0 +1,70 @@
+{
+  "lightgbm": {
+    "features": [
+      {"name": "动量_5日", "importance": 0.152},
+      {"name": "波动率_20日", "importance": 0.138},
+      {"name": "换手率", "importance": 0.125},
+      {"name": "RSI_14", "importance": 0.112},
+      {"name": "ATR_14", "importance": 0.098},
+      {"name": "MACD", "importance": 0.085},
+      {"name": "布林带位置", "importance": 0.072},
+      {"name": "成交额", "importance": 0.065},
+      {"name": "动量_10日", "importance": 0.058},
+      {"name": "振幅_5日", "importance": 0.052},
+      {"name": "量价相关性", "importance": 0.043},
+      {"name": "涨跌幅标准差", "importance": 0.038},
+      {"name": "最高价位置", "importance": 0.032},
+      {"name": "最低价位置", "importance": 0.028},
+      {"name": "收盘价位置", "importance": 0.025},
+      {"name": "成交量MA5", "importance": 0.022},
+      {"name": "成交量MA10", "importance": 0.018},
+      {"name": "价格MA5偏离", "importance": 0.015},
+      {"name": "价格MA10偏离", "importance": 0.012},
+      {"name": "动量_20日", "importance": 0.010}
+    ],
+    "params": {
+      "objective": "lambdarank",
+      "num_leaves": 31,
+      "learning_rate": 0.05,
+      "n_estimators": 200,
+      "max_depth": -1,
+      "min_child_samples": 20,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8
+    }
+  },
+  "xgboost": {
+    "features": [
+      {"name": "波动率_20日", "importance": 0.145},
+      {"name": "动量_5日", "importance": 0.132},
+      {"name": "RSI_14", "importance": 0.118},
+      {"name": "换手率", "importance": 0.105},
+      {"name": "MACD", "importance": 0.095},
+      {"name": "ATR_14", "importance": 0.088},
+      {"name": "布林带位置", "importance": 0.075},
+      {"name": "动量_10日", "importance": 0.068},
+      {"name": "成交额", "importance": 0.055},
+      {"name": "振幅_5日", "importance": 0.048},
+      {"name": "量价相关性", "importance": 0.042},
+      {"name": "涨跌幅标准差", "importance": 0.035},
+      {"name": "最高价位置", "importance": 0.030},
+      {"name": "最低价位置", "importance": 0.025},
+      {"name": "收盘价位置", "importance": 0.022},
+      {"name": "成交量MA5", "importance": 0.018},
+      {"name": "成交量MA10", "importance": 0.015},
+      {"name": "价格MA5偏离", "importance": 0.012},
+      {"name": "价格MA10偏离", "importance": 0.010},
+      {"name": "动量_20日", "importance": 0.008}
+    ],
+    "params": {
+      "objective": "rank:ndcg",
+      "max_depth": 6,
+      "learning_rate": 0.05,
+      "n_estimators": 200,
+      "min_child_weight": 1,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "gamma": 0
+    }
+  }
+}

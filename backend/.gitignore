@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Runtime outputs
+logs/
+
+# Data cache and artifacts
+data/*.parquet
+data/raw/*.parquet
+data/*.db
+data/*.sqlite
+
+# Environment files
+.env

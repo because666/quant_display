@@ -1,0 +1,53 @@
+{
+  "generated_at": "2026-04-10T04:10:45Z",
+  "metrics_table": [
+    {
+      "metric": "annualized_return",
+      "lightgbm": -0.16724111721062962,
+      "xgboost": 0.21265553229058232,
+      "difference": -0.37989664950121194
+    },
+    {
+      "metric": "drawdown_peak_date",
+      "lightgbm": "2023-03-09",
+      "xgboost": "2023-06-22",
+      "difference": null
+    },
+    {
+      "metric": "drawdown_trough_date",
+      "lightgbm": "2024-02-09",
+      "xgboost": "2024-02-02",
+      "difference": null
+    },
+    {
+      "metric": "max_drawdown",
+      "lightgbm": 0.5365495493838224,
+      "xgboost": 0.3000273686556262,
+      "difference": 0.2365221807281962
+    },
+    {
+      "metric": "ndcg_at_10",
+      "lightgbm": null,
+      "xgboost": null,
+      "difference": null
+    },
+    {
+      "metric": "sharpe_ratio",
+      "lightgbm": -0.7254438857516502,
+      "xgboost": 0.4554964990491361,
+      "difference": -1.1809403848007862
+    },
+    {
+      "metric": "turnover_rate",
+      "lightgbm": null,
+      "xgboost": null,
+      "difference": null
+    },
+    {
+      "metric": "win_rate",
+      "lightgbm": null,
+      "xgboost": null,
+      "difference": null
+    }
+  ]
+}

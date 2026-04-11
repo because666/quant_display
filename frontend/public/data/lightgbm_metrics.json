@@ -1,0 +1,31 @@
+{
+  "val_ndcg": {
+    "ndcg@5": 0.2064838786927969,
+    "ndcg@10": 0.18862864713216812,
+    "ndcg@20": 0.15791250408178753
+  },
+  "train_ndcg": {
+    "ndcg@5": 0.6203278020328457,
+    "ndcg@10": 0.5418231040280398,
+    "ndcg@20": 0.442711562980656
+  },
+  "best_iteration": 6,
+  "feature_count": 15,
+  "features": [
+    "avg_volume_4w",
+    "avg_volume_8w",
+    "macd_signal",
+    "macd_diff",
+    "max_retreat_4w",
+    "macd_level",
+    "volatility_12w",
+    "volatility_4w",
+    "max_retreat_8w",
+    "ma_ratio_4w",
+    "rsi_21",
+    "mom_6m",
+    "mom_1m",
+    "mom_3m",
+    "mom_2m"
+  ]
+}

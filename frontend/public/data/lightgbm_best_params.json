@@ -1,0 +1,21 @@
+{
+  "objective": "lambdarank",
+  "metric": "ndcg",
+  "ndcg_eval_at": [
+    5,
+    10,
+    20
+  ],
+  "boosting_type": "gbdt",
+  "num_leaves": 48,
+  "learning_rate": 0.015957084694148364,
+  "feature_fraction": 0.9330880728874675,
+  "bagging_fraction": 0.8,
+  "bagging_freq": 5,
+  "verbose": -1,
+  "seed": 42,
+  "bagging_seed": 42,
+  "feature_fraction_seed": 42,
+  "deterministic": true,
+  "min_child_samples": 10
+}

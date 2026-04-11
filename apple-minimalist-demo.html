@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苹果极简风格示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+            background: #FFFFFF;
+            color: #1D1D1F;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 80px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1D1D1F;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            color: #1D1D1F;
+            cursor: pointer;
+            transition: color 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .nav-item:hover {
+            color: #86868B;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .nav-icon:hover {
+            opacity: 1;
+        }
+
+        /* Hero 区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-align: center;
+            margin-bottom: 24px;
+            animation: blurFadeIn 1.2s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 21px;
+            color: #86868B;
+            text-align: center;
+            max-width: 600px;
+            animation: blurFadeIn 1.2s ease-out 0.2s backwards;
+        }
+
+        .hero-visual {
+            margin-top: 80px;
+            position: relative;
+            width: 400px;
+            height: 400px;
+            animation: blurFadeIn 1.2s ease-out 0.4s backwards;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F5F5F7 0%, #FFFFFF 100%);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.02),
+                0 6px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #E8E8ED 0%, #F5F5F7 100%);
+        }
+
+        .circle-3 {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #0071E3 0%, #00A3E3 100%);
+        }
+
+        /* 内容网格 */
+        .content-section {
+            padding: 120px 80px;
+            background: #F5F5F7;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-align: center;
+            margin-bottom: 80px;
+            animation: blurFadeIn 1.2s ease-out;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.02),
+                0 6px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(255, 255, 255, 0.3) 0%, 
+                transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+            pointer-events: none;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 24px 48px rgba(0, 0, 0, 0.03),
+                0 8px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #F5F5F7 0%, #E8E8ED 100%);
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            color: #1D1D1F;
+        }
+
+        .card-description {
+            font-size: 16px;
+            color: #86868B;
+            line-height: 1.5;
+        }
+
+        /* CTA 按钮 */
+        .cta-section {
+            padding: 120px 80px;
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: #0071E3;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button:hover {
+            background: #0077ED;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 粒子背景 */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 动画 */
+        @keyframes blurFadeIn {
+            from {
+                filter: blur(10px);
+                opacity: 0;
+            }
+            to {
+                filter: blur(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 40px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 40px;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .hero-visual {
+                width: 300px;
+                height: 300px;
+            }
+
+            .circle-1 {
+                width: 220px;
+                height: 220px;
+            }
+
+            .circle-2 {
+                width: 150px;
+                height: 150px;
+            }
+
+            .circle-3 {
+                width: 80px;
+                height: 80px;
+            }
+
+            .content-section {
+                padding: 80px 40px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 80px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">Minimal</div>
+        <div class="nav-menu">
+            <div class="nav-item">产品</div>
+            <div class="nav-item">功能</div>
+            <div class="nav-item">定价</div>
+            <div class="nav-item">关于</div>
+        </div>
+        <div class="nav-icons">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero">
+        <h1 class="hero-title">极简设计<br>极致体验</h1>
+        <p class="hero-subtitle">专注于本质，去除一切多余。用最简洁的方式，传递最纯粹的价值。</p>
+        <div class="hero-visual">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+    </section>
+
+    <!-- 内容网格 -->
+    <section class="content-section">
+        <h2 class="section-title">核心功能</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="card-icon"></div>
+                <h3 class="card-title">智能分析</h3>
+                <p class="card-description">基于先进算法，提供精准的数据分析和洞察，帮助您做出明智决策。</p>
+            </div>
+            <div class="product-card">
+                <div class="card-icon"></div>
+                <h3 class="card-title">实时监控</h3>
+                <p class="card-description">全天候监控系统状态，及时发现并预警潜在问题，确保业务稳定运行。</p>
+            </div>
+            <div class="product-card">
+                <div class="card-icon"></div>
+                <h3 class="card-title">自动化流程</h3>
+                <p class="card-description">简化复杂流程，自动化重复任务，提升工作效率，释放创造力。</p>
+            </div>
+            <div class="product-card">
+                <div class="card-icon"></div>
+                <h3 class="card-title">数据安全</h3>
+                <p class="card-description">采用银行级加密技术，多重备份机制，确保您的数据安全无忧。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 区域 -->
+    <section class="cta-section">
+        <button class="cta-button">立即开始</button>
+    </section>
+
+    <script>
+        // 粒子系统
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particles-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: null, y: null, radius: 150 };
+                
+                this.init();
+                this.animate();
+                this.setupEventListeners();
+            }
+
+            init() {
+                this.resize();
+                this.createParticles();
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createParticles() {
+                const particleCount = 40;
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        baseX: Math.random() * this.canvas.width,
+                        baseY: Math.random() * this.canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5,
+                        opacity: 0.3
+                    });
+                }
+            }
+
+            setupEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.particles = [];
+                    this.createParticles();
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.x;
+                    this.mouse.y = e.y;
+                });
+
+                window.addEventListener('mouseout', () => {
+                    this.mouse.x = null;
+                    this.mouse.y = null;
+                });
+
+                // 卡片聚光灯效果
+                document.querySelectorAll('.product-card').forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) * 100;
+                        const y = ((e.clientY - rect.top) / rect.height) * 100;
+                        card.style.setProperty('--mouse-x', `${x}%`);
+                        card.style.setProperty('--mouse-y', `${y}%`);
+                    });
+                });
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.particles.forEach(particle => {
+                    // Perlin Noise 随机漫步
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+
+                    // 边界检测
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.speedY *= -1;
+
+                    // 鼠标交互
+                    if (this.mouse.x !== null && this.mouse.y !== null) {
+                        const dx = this.mouse.x - particle.x;
+                        const dy = this.mouse.y - particle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < this.mouse.radius) {
+                            const force = (this.mouse.radius - distance) / this.mouse.radius;
+                            const angle = Math.atan2(dy, dx);
+                            particle.x -= Math.cos(angle) * force * 2;
+                            particle.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+
+                    // 缓慢复位
+                    particle.x += (particle.baseX - particle.x) * 0.01;
+                    particle.y += (particle.baseY - particle.y) * 0.01;
+
+                    // 绘制粒子
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(232, 232, 237, ${particle.opacity})`;
+                    this.ctx.fill();
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // 初始化粒子系统
+        new ParticleSystem();
+
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

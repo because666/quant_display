@@ -1,0 +1,2 @@
+{"trial": 0, "value": 0.18928460074851944, "params": {"num_leaves": 102, "learning_rate": 0.17254716573280354, "min_child_samples": 75, "feature_fraction": 0.7993292420985183}, "user_attrs": {"best_iteration": 15, "val_ndcg@5": 0.2060398944275201, "val_ndcg@20": 0.16171770636152505}}
+{"trial": 1, "value": 0.19021969407766082, "params": {"num_leaves": 48, "learning_rate": 0.015957084694148364, "min_child_samples": 10, "feature_fraction": 0.9330880728874675}, "user_attrs": {"best_iteration": 2, "val_ndcg@5": 0.21015484526717745, "val_ndcg@20": 0.16016555832837423}}

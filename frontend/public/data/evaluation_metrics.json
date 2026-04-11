@@ -1,0 +1,29 @@
+{
+  "lightgbm": {
+    "ndcg@5": 0.09875472934714939,
+    "ndcg@10": 0.09653816437142547,
+    "ndcg@20": 0.10455877547003095,
+    "map": 0.4769688116246318
+  },
+  "xgboost": {
+    "ndcg@5": 0.09469527655290504,
+    "ndcg@10": 0.10188051914910051,
+    "ndcg@20": 0.10655678586150198,
+    "map": 0.48393457838386666
+  },
+  "settings": {
+    "fill_missing": true,
+    "k_list": [
+      5,
+      10,
+      20
+    ],
+    "test_rows": 532889,
+    "num_queries": 101
+  },
+  "ndcg_curve": {
+    "png": "models/ndcg_curve.png",
+    "json": "models/ndcg_curve.json"
+  },
+  "feature_importance_compare_png": "models/feature_importance_compare.png"
+}
