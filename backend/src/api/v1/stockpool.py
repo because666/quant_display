@@ -23,6 +23,57 @@ DATA_DIR = PROJECT_ROOT / "data"
 
 _section_cache: dict[str, Any] = {}
 _date_list_cache: list[str] | None = None
+_stock_list_cache: list[dict[str, str]] | None = None
+
+
+def _load_stock_list_from_meta(data_dir: Path) -> list[dict[str, str]]:
+    """从 data/meta/surviving_stocks_*.parquet 加载股票列表（优先使用最大范围的文件）"""
+    global _stock_list_cache
+    if _stock_list_cache is not None:
+        return _stock_list_cache
+
+    meta_dir = data_dir / "meta"
+    if meta_dir.exists():
+        parquet_files = sorted(meta_dir.glob("surviving_stocks_*.parquet"), reverse=True)
+        if parquet_files:
+            try:
+                df = pd.read_parquet(parquet_files[0])
+                stock_list = []
+                for _, row in df.iterrows():
+                    stock_list.append({
+                        "code": str(row.get("code", "")).strip(),
+                        "name": str(row.get("name", "")).strip(),
+                    })
+                _stock_list_cache = stock_list
+                return stock_list
+            except Exception as e:
+                logger.warning("从meta目录加载股票列表失败: %s", e)
+
+    stock_list_path = data_dir / "stock_list.csv"
+    if stock_list_path.exists():
+        try:
+            df = pd.read_csv(stock_list_path, dtype=str)
+            stock_list = []
+            for _, row in df.iterrows():
+                stock_list.append({
+                    "code": str(row.get("stock_code", row.get("代码", ""))).strip(),
+                    "name": str(row.get("stock_name", row.get("名称", ""))).strip(),
+                })
+            _stock_list_cache = stock_list
+            return stock_list
+        except Exception as e:
+            logger.warning("从stock_list.csv加载股票列表失败: %s", e)
+
+    raw_dir = data_dir / "raw"
+    if raw_dir.exists():
+        parquet_files = sorted(raw_dir.glob("*.parquet"))
+        codes = [f.stem for f in parquet_files if f.stem.isdigit() and len(f.stem) == 6]
+        stock_list = [{"code": c, "name": ""} for c in codes]
+        _stock_list_cache = stock_list
+        return stock_list
+
+    _stock_list_cache = []
+    return []
 
 
 def _find_parquet_files(data_dir: Path) -> list[Path]:
@@ -136,23 +187,7 @@ def get_stock_list(
 ) -> dict[str, Any]:
     """获取全部股票列表（分页），支持关键词搜索"""
     try:
-        stock_list_path = DATA_DIR / "stock_list.csv"
-        if not stock_list_path.exists():
-            raw_dir = DATA_DIR / "raw"
-            if raw_dir.exists():
-                parquet_files = sorted(raw_dir.glob("*.parquet"))
-                codes = [f.stem for f in parquet_files if f.stem.isdigit() and len(f.stem) == 6]
-                stock_list = [{"code": c, "name": ""} for c in codes]
-            else:
-                return {"code": 200, "data": {"stocks": [], "total": 0, "page": page, "page_size": page_size}}
-        else:
-            df = pd.read_csv(stock_list_path, dtype=str)
-            stock_list = []
-            for _, row in df.iterrows():
-                stock_list.append({
-                    "code": str(row.get("stock_code", row.get("代码", ""))).strip(),
-                    "name": str(row.get("stock_name", row.get("名称", ""))).strip(),
-                })
+        stock_list = _load_stock_list_from_meta(DATA_DIR)
 
         if keyword:
             keyword = keyword.strip()
@@ -184,12 +219,8 @@ def get_stock_list(
 def get_stock_count(request: Request) -> dict[str, Any]:
     """获取股票池总数"""
     try:
-        raw_dir = DATA_DIR / "raw"
-        if raw_dir.exists():
-            count = len(list(raw_dir.glob("*.parquet")))
-        else:
-            count = 0
-        return {"code": 200, "data": {"total": count}}
+        stock_list = _load_stock_list_from_meta(DATA_DIR)
+        return {"code": 200, "data": {"total": len(stock_list)}}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
