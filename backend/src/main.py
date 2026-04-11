@@ -4,9 +4,12 @@ FastAPI 入口。亦可直接触发回测并导出静态 JSON（与 ``python -m 
     python -m src.main --run
 """
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.api.v1 import api_v1_router
 from src.config import get_settings
@@ -32,6 +35,21 @@ app.include_router(api_v1_router, prefix=settings.api_v1_prefix)
 @app.get("/health", tags=["system"])
 def root_health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+# ==================== 前端静态文件托管 ====================
+static_dir = Path(__file__).resolve().parent.parent / "static"
+
+if static_dir.exists():
+    app.mount("/assets", StaticFiles(directory=static_dir / "assets"), name="assets")
+
+    @app.get("/{full_path:path}", tags=["frontend"])
+    async def serve_frontend(full_path: str) -> FileResponse:
+        """SPA路由兜底：所有非API路径返回index.html"""
+        requested_file = static_dir / full_path
+        if requested_file.exists() and requested_file.is_file():
+            return FileResponse(requested_file)
+        return FileResponse(static_dir / "index.html")
 
 
 @app.exception_handler(Exception)
