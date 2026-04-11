@@ -4,12 +4,17 @@ FROM python:3.11-slim
 # 设置工作目录
 WORKDIR /app
 
-# 安装系统依赖
+# 安装系统依赖和pip
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     libgomp1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+# 确保pip是最新版本
+RUN python -m ensurepip --upgrade && \
+    python -m pip install --upgrade pip setuptools wheel
 
 # 复制依赖文件
 COPY requirements.txt .
@@ -28,4 +33,4 @@ ENV PORT=8000
 EXPOSE 8000
 
 # 启动命令
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
