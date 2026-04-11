@@ -1,0 +1,22 @@
+# 虚拟环境
+venv/
+venv310/
+
+# 数据文件（太大）
+data/raw/
+data/qlib_bin.tar.gz
+
+# 日志
+logs/
+*.log
+
+# 缓存
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 环境变量
+.env
+
+# 模型文件（可选，如果太大可以忽略）
+# models/*.pkl
