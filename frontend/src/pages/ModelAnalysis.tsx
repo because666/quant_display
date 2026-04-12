@@ -6,9 +6,11 @@
  * @version 2.0
  */
 import { useState, useEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { LineChart, BarChart, PieChart } from '../components/Charts'
 import { useAppStore } from '../store/useAppStore'
 import { backtestService } from '../services/backtest'
+import { ScrollReveal } from '../components/motion'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
 
@@ -428,21 +430,22 @@ function ModelAnalysis() {
   }, [featureData])
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
       {/* 页面标题和模型切换 */}
+      <ScrollReveal index={0}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            模型分析
-          </h1>
-          <p style={{ fontSize: '15px', color: '#86868B' }}>
+          <h1 className="page-title">模型分析</h1>
+          <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
             特征重要性、排序性能指标分析
           </p>
         </div>
         <ModelSelector selected={selectedModel} onChange={setSelectedModel} />
       </div>
+      </ScrollReveal>
 
       {/* 评估指标卡片 */}
+      <ScrollReveal index={1}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
         {[
           { label: 'MAP', value: ndcgData?.mapScore.toFixed(3), color: '#0071E3' },
@@ -450,29 +453,25 @@ function ModelAnalysis() {
           { label: 'NDCG@10', value: ndcgData?.ndcgByK.find(d => d.k === 10)?.ndcg.toFixed(3), color: '#AF52DE' },
           { label: '特征数量', value: featureData?.features.length ?? 0, color: '#FF9500' },
         ].map((item, index) => (
-          <div 
-            key={index} 
+          <motion.div
+            key={index}
+            whileHover={{ y: -3, scale: 1.02 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             style={{ ...glassCardStyle, padding: '20px 24px' }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.02) translateY(-4px)'
-              e.currentTarget.style.boxShadow = '0 24px 48px rgba(0, 0, 0, 0.05), 0 8px 16px rgba(0, 0, 0, 0.03)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1) translateY(0)'
-              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.03), 0 6px 12px rgba(0, 0, 0, 0.02)'
-            }}
           >
-            <p style={{ fontSize: '12px', color: '#86868B', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>{item.label}</p>
+            <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>{item.label}</p>
             <p style={{ fontSize: '28px', fontWeight: 600, color: item.color, letterSpacing: '-0.02em' }}>
               {loading ? <Skeleton style={{ height: '32px', width: '80px' }} /> : item.value}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
+      </ScrollReveal>
 
       {/* 特征重要性 Top 20 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={2}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           特征重要性 Top 20
         </div>
         <div style={{ padding: '32px' }}>
@@ -494,12 +493,14 @@ function ModelAnalysis() {
             </>
           ) : null}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 双模型特征重要性对比 + 特征重要性饼图 */}
+      <ScrollReveal index={3}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             双模型特征重要性对比 Top 15
           </div>
           <div style={{ padding: '32px' }}>
@@ -518,10 +519,10 @@ function ModelAnalysis() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             特征重要性占比分布
           </div>
           <div style={{ padding: '32px' }}>
@@ -544,13 +545,15 @@ function ModelAnalysis() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* NDCG曲线 */}
+      <ScrollReveal index={4}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             NDCG@K 曲线
           </div>
           <div style={{ padding: '32px' }}>
@@ -575,10 +578,10 @@ function ModelAnalysis() {
               </>
             ) : null}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             NDCG 时间序列
           </div>
           <div style={{ padding: '32px' }}>
@@ -612,12 +615,14 @@ function ModelAnalysis() {
               </>
             ) : null}
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* 评估指标雷达图 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={5}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           双模型评估指标对比
         </div>
         <div style={{ padding: '32px' }}>
@@ -636,11 +641,13 @@ function ModelAnalysis() {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 模型参数 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={6}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           模型参数配置
         </div>
         <div style={{ padding: '32px' }}>
@@ -653,10 +660,12 @@ function ModelAnalysis() {
             <ParamsDisplay params={featureData.params} />
           ) : null}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* Transformer 占位 */}
-      <div style={glassCardStyle}>
+      <ScrollReveal index={7}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
         <div style={{ padding: '32px' }}>
           <div style={{ 
             height: '320px', 
@@ -698,11 +707,13 @@ function ModelAnalysis() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 模型对比说明 */}
-      <div style={{ ...glassCardStyle, marginTop: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={8}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           模型对比说明
         </div>
         <div style={{ padding: '32px' }}>
@@ -743,7 +754,8 @@ function ModelAnalysis() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
     </div>
   )
 }

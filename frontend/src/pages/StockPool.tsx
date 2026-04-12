@@ -7,12 +7,14 @@
  * @version 2.0
  */
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import {
   stockPoolService,
   type RankResponse,
   type StockListResponse,
 } from '../services/stockPool'
 import { BarChart } from '../components/Charts'
+import { ScrollReveal } from '../components/motion'
 
 /** 模型类型 */
 type ModelType = 'lightgbm' | 'xgboost'
@@ -155,19 +157,20 @@ function StockPool() {
   }, [rankData])
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
       {/* 页面标题 */}
+      <ScrollReveal index={0}>
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-          选股池
-        </h1>
-        <p style={{ fontSize: '15px', color: '#86868B' }}>
+        <h1 className="page-title">选股池</h1>
+        <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
           基于排序学习模型对股票池进行排序推荐，支持自定义股票池和截面日期选择
         </p>
       </div>
+      </ScrollReveal>
 
       {/* 控制面板卡片 */}
-      <div style={{ ...glassCardStyle, padding: '24px 32px', marginBottom: '24px' }}>
+      <ScrollReveal index={1}>
+      <motion.div className="card" style={{ padding: '24px 32px', marginBottom: '24px' }} whileHover={{ y: -1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px', color: '#86868B' }}>模型:</span>
@@ -276,7 +279,8 @@ function StockPool() {
             />
           </div>
         )}
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 排序说明卡片 */}
       {rankData && (

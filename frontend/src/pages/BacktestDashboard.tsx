@@ -6,9 +6,11 @@
  * @version 2.0
  */
 import { useState, useEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { LineChart, BarChart, Heatmap } from '../components/Charts'
 import { useAppStore } from '../store/useAppStore'
 import { backtestService, type NavPoint } from '../services/backtest'
+import { ScrollReveal, RippleButton, Skeleton as MotionSkeleton } from '../components/motion'
 import type { BacktestMetrics } from '../types'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
@@ -501,22 +503,23 @@ function BacktestDashboard() {
   }, [comparisonData])
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
       {/* 页面标题和模型切换 */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
-        <div>
-          <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            回测仪表盘
-          </h1>
-          <p style={{ fontSize: '15px', color: '#86868B' }}>
-            回测区间：2022-01-01 至 2024-04-03
-          </p>
+      <ScrollReveal index={0}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+          <div>
+            <h1 className="page-title">回测仪表盘</h1>
+            <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
+              回测区间：2022-01-01 至 2024-04-03
+            </p>
+          </div>
+          <ModelSelector selected={selectedModel} onChange={setSelectedModel} />
         </div>
-        <ModelSelector selected={selectedModel} onChange={setSelectedModel} />
-      </div>
+      </ScrollReveal>
 
       {/* 主要指标卡片 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '16px', marginBottom: '24px' }}>
+      <ScrollReveal index={1}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '16px', marginBottom: '24px' }}>
         <MetricCard
           label="年化收益"
           value={data?.metrics.annualReturn ?? 0}
@@ -559,8 +562,10 @@ function BacktestDashboard() {
           loading={loading}
         />
       </div>
+      </ScrollReveal>
 
       {/* 次要指标卡片 */}
+      <ScrollReveal index={2}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
         {[
           { label: '卡玛比率', value: loading ? null : data?.metrics.calmarRatio.toFixed(2) },
@@ -568,18 +573,25 @@ function BacktestDashboard() {
           { label: '模型类型', value: selectedModel === 'lightgbm' ? 'LambdaRank' : 'rank:ndcg' },
           { label: '调仓周期', value: '每周调仓' },
         ].map((item, index) => (
-          <div key={index} style={{ ...glassCardStyle, padding: '16px 20px' }}>
-            <p style={{ fontSize: '12px', color: '#86868B', marginBottom: '4px' }}>{item.label}</p>
-            <p style={{ fontSize: '18px', fontWeight: 600, color: '#1D1D1F' }}>
-              {loading && item.value === null ? <Skeleton style={{ height: '24px', width: '60px' }} /> : item.value}
+          <motion.div
+            key={index}
+            whileHover={{ y: -2, scale: 1.01 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            style={{ ...glassCardStyle, padding: '16px 20px' }}
+          >
+            <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>{item.label}</p>
+            <p style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text)' }}>
+              {loading && item.value === null ? <Skeleton variant="stat" /> : item.value}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
+      </ScrollReveal>
 
       {/* 净值曲线 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={3}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           策略净值曲线
         </div>
         <div style={{ padding: '32px' }}>
@@ -609,12 +621,14 @@ function BacktestDashboard() {
             </>
           ) : null}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 回撤曲线 + 超额收益曲线 */}
+      <ScrollReveal index={4}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             最大回撤曲线
           </div>
           <div style={{ padding: '32px' }}>
@@ -639,10 +653,10 @@ function BacktestDashboard() {
               </>
             ) : null}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             超额收益曲线（LightGBM vs XGBoost）
           </div>
           <div style={{ padding: '32px' }}>
@@ -673,13 +687,15 @@ function BacktestDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* 月度收益热力图 + 换手率 */}
+      <ScrollReveal index={5}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             月度收益热力图
           </div>
           <div style={{ padding: '32px' }}>
@@ -698,10 +714,10 @@ function BacktestDashboard() {
               </>
             ) : null}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             周换手率 (%)
           </div>
           <div style={{ padding: '32px' }}>
@@ -722,13 +738,15 @@ function BacktestDashboard() {
               </>
             ) : null}
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* 周收益分布 + 模型对比雷达图 */}
+      <ScrollReveal index={6}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             周收益率分布
           </div>
           <div style={{ padding: '32px' }}>
@@ -753,10 +771,10 @@ function BacktestDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             模型对比雷达图
           </div>
           <div style={{ padding: '32px' }}>
@@ -775,12 +793,14 @@ function BacktestDashboard() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* 双模型归一化净值对比 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={7}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           双模型归一化净值对比
         </div>
         <div style={{ padding: '32px' }}>
@@ -812,11 +832,13 @@ function BacktestDashboard() {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 模型对比表格 */}
-      <div style={glassCardStyle}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={8}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           模型对比指标明细
         </div>
         <div style={{ padding: '32px' }}>
@@ -864,7 +886,8 @@ function BacktestDashboard() {
             </table>
           </div>
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
     </div>
   )
 }

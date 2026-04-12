@@ -1,9 +1,11 @@
 /**
  * 导航栏组件
- * 苹果极简风格，毛玻璃效果，支持路由高亮、移动端响应式菜单
+ * 融合 Anti-AI 美学 + Purposeful Motion 设计理念
+ * Space Grotesk 字体 / 弹簧物理交互 / 毛玻璃深度效果
  */
 import { useEffect, useCallback, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAppStore } from '../../store/useAppStore'
 import type { ThemeMode } from '../../store/useAppStore'
 
@@ -27,7 +29,6 @@ function Navbar() {
   const { theme, setTheme, mobileMenuOpen, setMobileMenuOpen } = useAppStore()
   const [scrolled, setScrolled] = useState(false)
 
-  // 监听滚动，添加scrolled状态
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
@@ -75,18 +76,18 @@ function Navbar() {
   }, [theme, setTheme])
 
   return (
-    <nav 
-      className="navbar" 
+    <nav
+      className="navbar"
       style={{
-        background: scrolled 
-          ? 'rgba(255, 255, 255, 0.95)' 
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: scrolled ? 'blur(30px)' : 'blur(20px)',
-        WebkitBackdropFilter: scrolled ? 'blur(30px)' : 'blur(20px)',
-        borderBottom: scrolled 
-          ? '1px solid rgba(0, 0, 0, 0.1)' 
-          : '1px solid rgba(0, 0, 0, 0.05)',
-        transition: 'all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
+        background: scrolled
+          ? 'rgba(255, 255, 255, 0.92)'
+          : 'rgba(255, 255, 255, 0.72)',
+        backdropFilter: scrolled ? 'blur(30px) saturate(200%)' : 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: scrolled ? 'blur(30px) saturate(200%)' : 'blur(24px) saturate(180%)',
+        borderBottom: scrolled
+          ? '1px solid rgba(0, 0, 0, 0.08)'
+          : '1px solid rgba(0, 0, 0, 0.04)',
+        transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
         height: '64px',
         position: 'fixed',
         top: 0,
@@ -97,24 +98,31 @@ function Navbar() {
     >
       <div className="navbar-inner" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <NavLink to="/strategy" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-          <div className="brand-icon" style={{ 
-            width: '32px', 
-            height: '32px', 
-            borderRadius: '8px', 
-            background: '#0071E3', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            color: 'white'
-          }}>
+          <motion.div
+            className="brand-icon"
+            whileHover={{ rotate: -6, scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #0071E3, #0055B3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              boxShadow: '0 2px 8px rgba(0, 113, 227, 0.3)',
+            }}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M3 13L8 8L13 13L21 5M21 11V19H3V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </div>
-          <span className="brand-text" style={{ fontSize: '20px', fontWeight: 600, color: '#1D1D1F', letterSpacing: '-0.02em' }}>QuantAlpha</span>
+          </motion.div>
+          <span className="brand-text">QuantAlpha</span>
         </NavLink>
 
-        <div className="navbar-links" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="navbar-links" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -127,49 +135,63 @@ function Navbar() {
                 padding: '8px 16px',
                 borderRadius: '980px',
                 fontSize: '14px',
-                fontWeight: isActive ? 500 : 400,
-                color: isActive ? '#0071E3' : '#1D1D1F',
+                fontWeight: isActive ? 600 : 400,
+                fontFamily: "'Space Grotesk', sans-serif",
+                color: isActive ? '#0071E3' : '#86868B',
                 background: isActive ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
                 textDecoration: 'none',
-                transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
               })}
             >
-              <span className="nav-link-icon">{item.icon}</span>
+              <motion.span
+                whileHover={{ scale: 1.15 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+                className="nav-link-icon"
+              >
+                {item.icon}
+              </motion.span>
               <span className="nav-link-label">{item.label}</span>
             </NavLink>
           ))}
         </div>
 
-        <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button 
-            onClick={cycleTheme} 
+        <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+          <motion.button
+            onClick={cycleTheme}
+            whileHover={{ scale: 1.08, rotate: 15 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+            title={`主题: ${getThemeLabel(theme)}`}
             style={{
-              width: '36px',
-              height: '36px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
               border: 'none',
               background: 'transparent',
-              color: '#1D1D1F',
+              color: '#86868B',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+              transition: 'color 0.25s ease',
             }}
-            title={`主题: ${getThemeLabel(theme)}`}
           >
             {getThemeIcon(theme)}
-          </button>
-          <button
+          </motion.button>
+
+          <motion.button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 20 }}
             style={{
               display: 'none',
-              width: '36px',
-              height: '36px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
               border: 'none',
               background: 'transparent',
-              color: '#1D1D1F',
+              color: '#86868B',
               cursor: 'pointer',
               alignItems: 'center',
               justifyContent: 'center',
@@ -189,48 +211,63 @@ function Navbar() {
                 </>
               )}
             </svg>
-          </button>
+          </motion.button>
         </div>
       </div>
 
-      {mobileMenuOpen && (
-        <div className="mobile-menu" style={{ 
-          position: 'absolute', 
-          top: '64px', 
-          left: 0, 
-          right: 0, 
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-          padding: '16px',
-          animation: 'slideUp 0.3s ease-out'
-        }}>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) => `mobile-nav-item ${isActive ? 'mobile-nav-item-active' : ''}`}
-              style={({ isActive }) => ({
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '14px 20px',
-                borderRadius: '12px',
-                fontSize: '15px',
-                fontWeight: isActive ? 500 : 400,
-                color: isActive ? '#0071E3' : '#1D1D1F',
-                background: isActive ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
-                textDecoration: 'none',
-                marginBottom: '4px',
-              })}
-            >
-              <span>{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              position: 'absolute',
+              top: '64px',
+              left: 0,
+              right: 0,
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(24px)',
+              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+              padding: '16px',
+              overflow: 'hidden',
+            }}
+          >
+            {navItems.map((item, i) => (
+              <motion.div
+                key={item.path}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <NavLink
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) => `mobile-nav-item ${isActive ? 'mobile-nav-item-active' : ''}`}
+                  style={({ isActive }) => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '14px 20px',
+                    borderRadius: '12px',
+                    fontSize: '15px',
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? '#0071E3' : '#1D1D1F',
+                    background: isActive ? 'rgba(0, 113, 227, 0.08)' : 'transparent',
+                    textDecoration: 'none',
+                    marginBottom: '4px',
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  })}
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </NavLink>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

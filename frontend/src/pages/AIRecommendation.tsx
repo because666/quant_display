@@ -6,11 +6,13 @@
  * @version 2.0
  */
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { fetchStreamingAdvice } from '../services/sse'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { AIAdvice } from '../types'
+import { ScrollReveal, RippleButton } from '../components/motion'
 
 type StreamingStatus = 'idle' | 'streaming' | 'completed' | 'error'
 
@@ -214,15 +216,15 @@ function AIRecommendation() {
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
+      <ScrollReveal index={0}>
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-          AI智能推荐
-        </h1>
-        <p style={{ fontSize: '15px', color: '#86868B' }}>
-          当前账户：<span style={{ fontWeight: 600, color: '#0071E3' }}>{accountName}</span>
+        <h1 className="page-title">AI智能推荐</h1>
+        <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
+          当前账户：<span style={{ fontWeight: 600, color: 'var(--color-primary)' }}>{accountName}</span>
         </p>
       </div>
+      </ScrollReveal>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '24px' }}>
         {/* 左侧：AI建议主区域 */}

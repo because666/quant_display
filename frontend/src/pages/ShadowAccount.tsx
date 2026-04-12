@@ -6,8 +6,10 @@
  * @version 2.0
  */
 import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { accountService } from '../services/account'
+import { ScrollReveal, RippleButton } from '../components/motion'
 
 /**
  * 毛玻璃卡片样式
@@ -249,25 +251,20 @@ function ShadowAccount() {
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
+      <ScrollReveal index={0}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
         <div>
-          <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            影子账户
-          </h1>
-          <p style={{ fontSize: '15px', color: '#86868B' }}>
-            当前账户：<span style={{ fontWeight: 600, color: '#0071E3' }}>{accountName}</span>
+          <h1 className="page-title">影子账户</h1>
+          <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
+            当前账户：<span style={{ fontWeight: 600, color: 'var(--color-primary)' }}>{accountName}</span>
           </p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          style={buttonStyle('secondary')}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.08)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.04)' }}
-        >
+        <RippleButton variant="secondary" onClick={() => setShowCreateModal(true)}>
           切换账户
-        </button>
+        </RippleButton>
       </div>
+      </ScrollReveal>
 
       {error && (
         <div style={{ ...glassCardStyle, padding: '16px 20px', marginBottom: '24px', background: 'rgba(255, 59, 48, 0.08)' }}>

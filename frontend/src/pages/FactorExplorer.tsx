@@ -6,7 +6,9 @@
  * @version 2.0
  */
 import { useState, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { BarChart } from '../components/Charts'
+import { ScrollReveal } from '../components/motion'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
 
@@ -168,38 +170,30 @@ function FactorExplorer() {
   ]
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <div className="page-container">
       {/* 页面标题 */}
+      <ScrollReveal index={0}>
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '40px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-          因子探索
-        </h1>
-        <p style={{ fontSize: '15px', color: '#86868B' }}>
+        <h1 className="page-title">因子探索</h1>
+        <p style={{ fontSize: '15px', color: 'var(--color-text-subtle)' }}>
           深入分析各因子与未来收益的相关性
         </p>
       </div>
+      </ScrollReveal>
 
       {/* 因子选择器 */}
-      <div style={{ ...glassCardStyle, padding: '24px 32px', marginBottom: '24px' }}>
+      <ScrollReveal index={1}>
+      <motion.div className="card" style={{ padding: '24px 32px', marginBottom: '24px' }} whileHover={{ y: -1 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '14px', color: '#86868B' }}>选择因子：</span>
+          <span style={{ fontSize: '14px', color: 'var(--color-text-muted)' }}>选择因子：</span>
           {loading ? (
-            <span style={{ color: '#86868B' }}>加载中...</span>
+            <span style={{ color: 'var(--color-text-muted)' }}>加载中...</span>
           ) : (
             <select
               value={selectedFactor}
               onChange={(e) => setSelectedFactor(e.target.value)}
-              style={{
-                border: '1px solid #E8E8ED',
-                borderRadius: '12px',
-                padding: '10px 16px',
-                fontSize: '14px',
-                background: '#FFFFFF',
-                color: '#1D1D1F',
-                outline: 'none',
-                cursor: 'pointer',
-                minWidth: '200px',
-              }}
+              className="input"
+              style={{ minWidth: '200px' }}
             >
               {correlations.map(c => (
                 <option key={c.factor_name} value={c.factor_name}>{c.factor_name}</option>
@@ -207,12 +201,14 @@ function FactorExplorer() {
             </select>
           )}
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 因子分布散点图 + IC值 */}
+      <ScrollReveal index={2}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '24px', marginBottom: '24px' }}>
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             因子分布散点图
           </div>
           <div style={{ padding: '32px' }}>
@@ -231,10 +227,10 @@ function FactorExplorer() {
               </>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        <div style={glassCardStyle}>
-          <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+        <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+          <div className="card-header">
             因子IC值排名
           </div>
           <div style={{ padding: '32px' }}>
@@ -246,12 +242,14 @@ function FactorExplorer() {
             />
             <ChartDescription text="IC值（信息系数）衡量因子与收益的线性相关程度，绝对值越大说明因子预测能力越强。正值表示因子越大收益越高，负值表示因子越大收益越低。" />
           </div>
-        </div>
+        </motion.div>
       </div>
+      </ScrollReveal>
 
       {/* 因子与未来收益相关性明细 */}
-      <div style={{ ...glassCardStyle, marginBottom: '24px' }}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={3}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           因子与未来收益相关性明细
         </div>
         <div style={{ padding: '32px' }}>
@@ -308,37 +306,33 @@ function FactorExplorer() {
             </table>
           </div>
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
 
       {/* 因子说明 */}
-      <div style={glassCardStyle}>
-        <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(0, 0, 0, 0.05)', fontWeight: 600, fontSize: '17px', color: '#1D1D1F' }}>
+      <ScrollReveal index={4}>
+      <motion.div className="card" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+        <div className="card-header">
           因子说明
         </div>
         <div style={{ padding: '32px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             {factorCategories.map((category) => (
-              <div
+              <motion.div
                 key={category.name}
+                whileHover={{ y: -3, backgroundColor: 'rgba(0, 113, 227, 0.06)' }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 style={{
                   padding: '24px',
-                  background: 'rgba(0, 0, 0, 0.02)',
+                  background: 'var(--color-bg-subtle)',
                   borderRadius: '16px',
-                  transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 113, 227, 0.06)'
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 0, 0, 0.02)'
-                  e.currentTarget.style.transform = 'translateY(0)'
+                  cursor: 'default',
                 }}
               >
-                <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#1D1D1F', marginBottom: '8px' }}>
+                <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '8px' }}>
                   {category.name}
                 </h4>
-                <p style={{ fontSize: '13px', color: '#86868B', lineHeight: 1.6, marginBottom: '12px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '12px' }}>
                   {category.description}
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -347,8 +341,8 @@ function FactorExplorer() {
                       key={factor}
                       style={{
                         fontSize: '12px',
-                        color: '#0071E3',
-                        background: 'rgba(0, 113, 227, 0.08)',
+                        color: 'var(--color-primary)',
+                        background: 'var(--color-primary-soft)',
                         padding: '4px 10px',
                         borderRadius: '6px',
                       }}
@@ -357,11 +351,12 @@ function FactorExplorer() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
+      </ScrollReveal>
     </div>
   )
 }
