@@ -13,19 +13,6 @@ import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
 
 /**
- * 毛玻璃卡片样式
- */
-const glassCardStyle: React.CSSProperties = {
-  background: 'rgba(255, 255, 255, 0.85)',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  borderRadius: '24px',
-  border: '1px solid rgba(255, 255, 255, 0.5)',
-  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.03), 0 6px 12px rgba(0, 0, 0, 0.02)',
-  transition: 'all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
-}
-
-/**
  * 图表说明组件
  * @param text - 说明文字
  * @returns 图表说明元素

@@ -6,7 +6,6 @@
  * @version 2.0
  */
 import { useState, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { accountService } from '../services/account'
 import { ScrollReveal, RippleButton } from '../components/motion'

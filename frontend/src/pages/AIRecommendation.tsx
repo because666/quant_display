@@ -6,13 +6,12 @@
  * @version 2.0
  */
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { fetchStreamingAdvice } from '../services/sse'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { AIAdvice } from '../types'
-import { ScrollReveal, RippleButton } from '../components/motion'
+import { ScrollReveal } from '../components/motion'
 
 type StreamingStatus = 'idle' | 'streaming' | 'completed' | 'error'
 
