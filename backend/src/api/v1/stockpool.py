@@ -231,7 +231,7 @@ def rank_stocks(
     body: StockPoolRankRequest,
     predictor: Annotated[ModelPredictor, Depends(get_predictor)],
 ) -> dict[str, Any]:
-    """使用模型对股票池排序，返回Top N推荐股票"""
+    """使用模型对股票池排序，返回Top N推荐股票。未指定自定义池时使用全量股票"""
     try:
         df, timestamp = _load_section(predictor._data_dir, date_str=body.date)
     except Exception as e:
@@ -243,6 +243,24 @@ def rank_stocks(
         df = df[df["stock_code"].astype(str).isin(want)].copy()
         if df.empty:
             raise HTTPException(status_code=400, detail="自定义股票池在当前截面中无匹配数据")
+    else:
+        all_stocks = _load_stock_list_from_meta(DATA_DIR)
+        all_codes = {s["code"] for s in all_stocks} if all_stocks else set()
+        section_codes = set(df["stock_code"].astype(str).unique())
+        missing_codes = all_codes - section_codes
+
+        if missing_codes:
+            factor_cols = [c for c in load_factor_columns(data_dir=predictor._data_dir) if c in df.columns]
+            empty_rows = []
+            for code in sorted(missing_codes):
+                row = {"stock_code": code}
+                for col in factor_cols:
+                    row[col] = 0.0
+                empty_rows.append(row)
+            if empty_rows:
+                extra_df = pd.DataFrame(empty_rows)
+                df = pd.concat([df, extra_df], ignore_index=True)
+                logger.info("已补充 %d 只无因子数据的股票到排序池（因子值填充为0）", len(missing_codes))
 
     try:
         top = predictor.get_top_stocks(df, top_n=body.top_n, with_contributions=False)
