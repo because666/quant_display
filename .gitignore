@@ -34,30 +34,19 @@ env/
 *.swo
 *~
 
-# Environment variables
+# Environment variables - 必须保留，防止敏感信息泄露
 .env
 .env.local
 .env.*.local
 
-# Database
+# Database - SQLite数据库文件通常很大，建议忽略
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
+# Logs - 日志文件通常很大且不需要版本控制
 *.log
 logs/
-
-# Data files (large binary files)
-backend/data/raw/*.parquet
-backend/data/*.parquet
-backend/data/*.tar.gz
-backend/data/**/*.parquet
-backend/data/**/*.tar.gz
-
-# Model files (large binary files)
-backend/models/*.pkl
-backend/models/*.json
 
 # Node.js
 node_modules/
@@ -79,9 +68,9 @@ build/
 .DS_Store
 Thumbs.db
 
-# Large binary files
-*.dll
-*.pyd
-*.node
-*.dat
+# Source map files - 仅开发时需要
 *.map
+
+# 大文件 - 超过GitHub 100MB限制，仅保留test.parquet
+backend/data/query_smoke_out/train.parquet
+backend/data/query_smoke_out/val.parquet
