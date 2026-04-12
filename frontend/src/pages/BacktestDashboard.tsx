@@ -10,7 +10,7 @@ import { motion } from 'framer-motion'
 import { LineChart, BarChart, Heatmap } from '../components/Charts'
 import { useAppStore } from '../store/useAppStore'
 import { backtestService, type NavPoint } from '../services/backtest'
-import { ScrollReveal, Skeleton as MotionSkeleton } from '../components/motion'
+import { ScrollReveal } from '../components/motion'
 import type { BacktestMetrics } from '../types'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
@@ -581,7 +581,7 @@ function BacktestDashboard() {
           >
             <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>{item.label}</p>
             <p style={{ fontSize: '18px', fontWeight: 600, color: 'var(--color-text)' }}>
-              {loading && item.value === null ? <MotionSkeleton variant="stat" /> : item.value}
+              {loading && item.value === null ? <Skeleton style={{ height: '28px', width: '80px' }} /> : item.value}
             </p>
           </motion.div>
         ))}
