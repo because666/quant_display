@@ -71,6 +71,6 @@ Thumbs.db
 # Source map files - 仅开发时需要
 *.map
 
-# 大文件 - 超过GitHub 100MB限制，仅保留test.parquet
-backend/data/query_smoke_out/train.parquet
-backend/data/query_smoke_out/val.parquet
+# 大文件 - 超过GitHub 100MB限制
+backend/data/query_smoke_out/*.parquet
+backend/data/query_smoke_out/*.parquet.gz

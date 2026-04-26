@@ -12,16 +12,7 @@ import { ScrollReveal } from '../components/motion'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
 
-/**
- * 图表说明组件
- * @param text - 说明文字
- * @returns 图表说明元素
- */
-function ChartDescription({ text }: { text: string }) {
-  return (
-    <p style={{ fontSize: '12px', color: '#86868B', marginTop: '8px', lineHeight: 1.6 }}>{text}</p>
-  )
-}
+
 
 function FactorExplorer() {
   const [selectedFactor, setSelectedFactor] = useState<string>('动量_5日')
