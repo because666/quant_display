@@ -74,8 +74,3 @@ Thumbs.db
 # 大文件 - 超过GitHub 100MB限制
 backend/data/query_smoke_out/*.parquet
 backend/data/query_smoke_out/*.parquet.gz
-
-# 超大文件 (>100MB) - 使用Git LFS管理
-backend/data/weekly_model_input.parquet*
-backend/data/weekly_factors.parquet*
-backend/data/train.parquet*
